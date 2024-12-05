@@ -1,0 +1,45 @@
+{
+      "id": "Habit",
+      "template": "anat_file",
+      "where": {
+        "container_type": "file",
+        "parent_container_type": "acquisition",
+        "file.type": {
+          "$in": [
+            "nifti",
+            "NIfTI",
+            "JSON"
+          ]
+        },
+        "file.classification.Intent": {
+          "$in": [
+            "Functional"
+          ]
+        },
+        "acquisition.label": {
+          "$regex": "(?!.*PhysioLog.*)HabitTask"
+        }
+      },
+      "initialize": {
+        "Task": {
+          "acquisition.label": {
+            "$regex": "(?P<value>HabitTask)"
+          }
+        },
+        "Suffix": {
+          "$switch": {
+            "$on": "acquisition.label",
+            "$cases": [
+              {
+                "$regex": ".*_SBRef$|.*_sbref$",
+                "$value": "sbref"
+              },
+              {
+                "$default": true,
+                "$value": "bold"
+              }
+            ]
+          }
+        }
+      }
+    }

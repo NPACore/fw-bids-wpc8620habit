@@ -1,0 +1,61 @@
+{
+      "id": "AntiSaccade",
+      "template": "func_file",
+      "where": {
+        "container_type": "file",
+        "parent_container_type": "acquisition",
+        "file.type": {
+          "$in": [
+            "nifti",
+            "NIfTI",
+            "JSON"
+          ]
+        },
+        "file.classification.Intent": {
+          "$in": [
+            "Functional"
+          ]
+        },
+        "acquisition.label": {
+          "$regex": "(?!.*PhysioLog.*)AntiSaccade"
+        }
+      },
+      "initialize": {
+        "Task": {
+          "acquisition.label": {
+            "$regex": "(?P<value>AntiSaccade)"
+          }
+        },
+        "Run": {
+           "acquisition.label": {
+               "$regex": "_(?P<value>repeat)",
+               "$format": [
+                   {
+                       "$replace": {
+                           "$pattern": "repeat",
+                           "$replacement": "2"
+                       }
+                   }
+               ]
+           },
+        "$run_counter": {
+            "key": "func.{file.info.BIDS.Task}.{file.info.BIDS.Suffix}.{file.type}"
+          }
+        },
+        "Suffix": {
+          "$switch": {
+            "$on": "acquisition.label",
+            "$cases": [
+              {
+                "$regex": ".*_SBRef$|.*_sbref$",
+                "$value": "sbref"
+              },
+              {
+                "$default": true,
+                "$value": "bold"
+              }
+            ]
+          }
+        }
+      }
+    }

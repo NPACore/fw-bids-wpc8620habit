@@ -1,0 +1,31 @@
+{
+      "id": "diffusion_b0_fmap",
+      "template": "fieldmap_file",
+      "where": {
+        "acquisition.label": {
+          "$regex": "dMRI_b0"
+        }
+      },
+      "initialize": {
+        "Dir": {
+          "acquisition.label": {
+            "$regex": "dMRI_b0.*(?P<value>AP|PA)"
+          }
+        },
+        "Suffix": {
+          "$switch": {
+            "$on": "acquisition.label",
+            "$cases": [
+              {
+                "$regex": ".*_SBRef$|.*_sbref$",
+                "$value": "sbref"
+              },
+              {
+                "$default": true,
+                "$value": "epi"
+              }
+            ]
+          }
+        }
+      }
+    }

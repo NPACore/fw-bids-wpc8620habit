@@ -1,0 +1,31 @@
+{
+   "id": "ABCD_T1w",
+   "template": "anat_file",
+   "where": {
+      "container_type": "file",
+      "parent_container_type": "acquisition",
+      "file.type": {
+         "$in": [
+            "nifti",
+            "NIfTI",
+            "JSON"
+         ]
+      },
+      "file.classification.Intent": {
+         "$in": [
+            "Structural"
+         ]
+      },
+      "acquisition.label": {
+         "$regex": "ABCD_T1w_MPR_vNav"
+      }
+   },
+   "initialize": {
+      "Suffix": "T1w",
+      "Run": {
+         "$run_counter": {
+            "key": "anat.{file.info.BIDS.Suffix}.{file.type}"
+         }
+      }
+   }
+}
