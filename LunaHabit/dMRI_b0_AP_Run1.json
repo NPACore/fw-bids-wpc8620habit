@@ -20,15 +20,5 @@
     "Acq": "b0",
     "Run": "1",
     "Suffix": "sbref"
-  },
-  "custom_name": {
-    "$join": [
-      "fmap/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
-      "ses-{file.info.BIDS.Session}",
-      "dir-{Dir}",
-      "run-{Run}",
-      "acq-{Acq}",
-      "{Suffix}"
-    ]
   }
 }

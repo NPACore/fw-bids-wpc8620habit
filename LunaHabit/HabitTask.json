@@ -33,14 +33,5 @@
       }
     },
     "Suffix": "bold"
-  },
-  "custom_name": {
-    "$join": [
-      "func/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
-      "ses-{file.info.BIDS.Session}",
-      "task-{Task}",
-      "run-{Run}",
-      "{Suffix}"
-    ]
   }
 }

@@ -20,15 +20,5 @@
     "Acq": "99",
     "Run": "2",
     "Suffix": "dwi"
-  },
-  "custom_name": {
-    "$join": [
-      "dwi/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
-      "ses-{file.info.BIDS.Session}",
-      "dir-{Dir}",
-      "run-{Run}",
-      "acq-{Acq}",
-      "{Suffix}"
-    ]
   }
 }

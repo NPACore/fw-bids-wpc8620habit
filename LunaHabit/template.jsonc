@@ -1,5 +1,33 @@
 {
-  "namespace": "BIDS",
-  "extends": "reproin",
-  "description": "Detailed BIDS curation template with updated rules to handle T1w, T2w, functional, fieldmap, and diffusion acquisitions while avoiding duplicate paths."
+    "namespace": "BIDS",
+    "extends": "reproin",
+    "description": "Luna Habit Study. Rest before and after rewarded eye tracking and habit task.",
+    "definitions": { // need to redo session.Subject
+        "session": {
+            "description": "BIDS session template",
+            "properties": {
+                "Label": {
+                    "type": "string",
+                    "title": "Label",
+                    "default": "",
+                    "auto_update": "<session.label>"
+                },
+                "Subject": {
+                    "type": "string",
+                    "title": "Subject Code",
+                    "default": "",
+                    "auto_update": {
+                        "$process": true,
+                        "$value": "{subject.code}",
+                        "$format": [{
+                            "$replace": { // remove date from subject id
+                                "$pattern": "_[0-9]+",
+                                "$replacement": ""}
+                        }]
+      }
+                }
+            },
+            "required": []
+        }
+    }
 }

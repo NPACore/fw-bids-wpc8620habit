@@ -6,3 +6,4 @@ LunaHabit/:
 
 LunaHabit_curate.json: $(wildcard LunaHabit/*)
 	./bundler.py  --jsondir LunaHabit/ --combined LunaHabit_curate.json --template LunaHabit/template.jsonc
+	# fw upload LunaHabit_curate.json fw://mrrc/playground

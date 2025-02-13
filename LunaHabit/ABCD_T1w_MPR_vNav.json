@@ -23,14 +23,5 @@
         "key": "anat.{file.info.BIDS.Acq}.{file.info.BIDS.Suffix}.{file.name}"
       }
     }
-  },
-  "custom_name": {
-    "$join": [
-      "anat/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
-      "ses-{file.info.BIDS.Session}",
-      "acq-{Acq}",
-      "run-{Run}",
-      "{Suffix}"
-    ]
   }
 }
