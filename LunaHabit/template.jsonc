@@ -10,7 +10,15 @@
                     "type": "string",
                     "title": "Label",
                     "default": "",
-                    "auto_update": "<session.label>"
+                    "auto_update": {
+                        "$process": true,
+                        "$value": "<session.label>", // this is yyyymmddhhmmss... '<>' is autoformat lowercase + rm spaces; {} is literal value
+                        "$format": [{
+                            "$replace": { // keep only the first 8 digits
+                                "$pattern": "(?<=[0-9]{8}).*",
+                                "$replacement": ""}
+                        }]
+                    }
                 },
                 "Subject": {
                     "type": "string",
