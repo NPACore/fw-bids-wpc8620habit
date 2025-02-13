@@ -1,0 +1,55 @@
+/*
+ grep nii.gz /tmp/nii.csv| cut -d, -f6,9|column -ts,|grep b0
+32 - dMRI_b0_AP_SBRef               fmap/sub-12112_ses-20241018_acq-b0_dir-AP_run-1_sbref.nii.gz
+33 - dMRI_b0_AP                     fmap/sub-12112_ses-20241018_acq-b0_dir-AP_run-1_epi.nii.gz
+36 - dMRI_b0_AP_SBRef               fmap/sub-12112_ses-20241018_acq-b0_dir-AP_run-2_sbref.nii.gz
+37 - dMRI_b0_AP                     fmap/sub-12112_ses-20241018_acq-b0_dir-AP_run-2_epi.nii.gz
+*/
+{
+  "id": "dMRI_b0",
+  "template": "fieldmap_file", // fmap folder
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {"$in": ["nifti", "NIfTI", "JSON"]},
+    "acquisition.label": {
+      "$regex": "dMRI_b0.*"
+    }
+  },
+  "initialize": {
+    "Acq": "b0",
+    "Dir": {
+      "acquisition.label": {
+        "$regex": ".*_(?P<value>AP|PA).*",
+        "$default": null
+      }
+    },
+
+    "Run": {
+        "$default": "1",
+        // flywheel_curated/nyu-bair-vfs-project-template.json
+        "$run_counter": {
+            "key": "field_map.{file.info.BIDS.Dir}"
+          }
+    },
+
+    // sbref for fmap epi is maybe junk.
+    // but we need to distinguish between the two acquisitions
+    // as long as we are matching both in "where"
+    "Suffix": {
+      "$switch": {
+        "$on": "acquisition.label",
+        "$cases": [
+          {
+            "$regex": ".*_SBRef$",
+            "$value": "sbref"
+          },
+          {
+            "$default": true,
+            "$value": "epi"
+          }
+        ]
+      }
+    }
+  }
+}
