@@ -65,9 +65,10 @@ def explode(in_json, out_dir, template):
 if __name__ == "__main__":
     args = args(sys.argv[1:])
     if args.explode:
+        # explode should be rare -- initializing with a template from somewhere else
         explode(args.combined, args.jsondir, args.template)
     else:
-        # default path
+        # default is to combining
         json_dict = combine(args.template, args.jsondir)
         with open(args.combined, 'w') as outfh:
             json.dump(json_dict, outfh, indent=2)
