@@ -12,12 +12,29 @@
       ]
     },
     "acquisition.label": {
-      "$regex": "Resting-state_ME$"
+      // also match SBRef or _repeat
+      "$regex": "Resting-state_ME.*"
     }
   },
   "initialize": {
     "Task": "RestingState",
-    "Run": "1",
+    // instead of run 1 and run 2
+    // indicate if rest was before or after the tasks
+    "Acq": {
+      "$switch": {
+        "$on": "acquisition.label",
+        "$cases": [
+          {
+            "$regex": "(?i).*_repeat.*",
+            "$value": "end"
+          },
+          {
+            "$default": true,
+            "$value": "start"
+          }
+        ]
+      }
+    },
     "Echo": {
       "file.name": {
         "$regex": "_e(?P<value>[0-9]+)",
