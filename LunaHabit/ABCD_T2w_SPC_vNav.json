@@ -1,0 +1,36 @@
+{
+  "id": "ABCD_T2w_SPC_vNav",
+  "template": "anat_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "ABCD_T2w_SPC_vNav$"
+    }
+  },
+  "initialize": {
+    "Acq": "vnav",
+    "Suffix": "T2w",
+    "Run": {
+      "$run_counter": {
+        "key": "anat.{file.info.BIDS.Acq}.{file.info.BIDS.Suffix}.{file.type}"
+      }
+    }
+  },
+  "custom_name": {
+    "$join": [
+      "anat/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
+      "ses-{file.info.BIDS.Session}",
+      "acq-{Acq}",
+      "run-{Run}",
+      "{Suffix}"
+    ]
+  }
+}

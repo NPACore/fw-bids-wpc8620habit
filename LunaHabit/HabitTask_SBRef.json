@@ -1,0 +1,32 @@
+{
+  "id": "HabitTask_SBRef",
+  "template": "func_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "HabitTask_SBRef$"
+    }
+  },
+  "initialize": {
+    "Task": "habit",
+    "Run": "1",
+    "Suffix": "sbref"
+  },
+  "custom_name": {
+    "$join": [
+      "func/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
+      "ses-{file.info.BIDS.Session}",
+      "task-{Task}",
+      "run-{Run}",
+      "{Suffix}"
+    ]
+  }
+}

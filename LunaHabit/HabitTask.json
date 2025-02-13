@@ -1,0 +1,46 @@
+{
+  "id": "HabitTask",
+  "template": "func_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "HabitTask$"
+    }
+  },
+  "initialize": {
+    "Task": "habit",
+    "Run": {
+      "$switch": {
+        "$on": "acquisition.label",
+        "$cases": [
+          {
+            "$regex": "_repeat",
+            "$value": "2"
+          },
+          {
+            "$default": true,
+            "$value": "1"
+          }
+        ]
+      }
+    },
+    "Suffix": "bold"
+  },
+  "custom_name": {
+    "$join": [
+      "func/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
+      "ses-{file.info.BIDS.Session}",
+      "task-{Task}",
+      "run-{Run}",
+      "{Suffix}"
+    ]
+  }
+}

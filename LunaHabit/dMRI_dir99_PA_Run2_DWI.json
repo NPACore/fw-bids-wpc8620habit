@@ -1,0 +1,34 @@
+{
+  "id": "dMRI_dir99_PA_Run2_DWI",
+  "template": "diffusion_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "dMRI_dir99-1_PA"
+    }
+  },
+  "initialize": {
+    "Dir": "PA",
+    "Acq": "99",
+    "Run": "2",
+    "Suffix": "dwi"
+  },
+  "custom_name": {
+    "$join": [
+      "dwi/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
+      "ses-{file.info.BIDS.Session}",
+      "dir-{Dir}",
+      "run-{Run}",
+      "acq-{Acq}",
+      "{Suffix}"
+    ]
+  }
+}

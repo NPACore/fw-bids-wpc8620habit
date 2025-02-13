@@ -1,0 +1,34 @@
+{
+  "id": "rsfMRI_SEFieldMap_AP_Run1",
+  "template": "fieldmap_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "rsfMRI_SEFieldMap_AP_3mm"
+    }
+  },
+  "initialize": {
+    "Dir": "AP",
+    "Acq": "rest1",
+    "Run": "1",
+    "Suffix": "epi"
+  },
+  "custom_name": {
+    "$join": [
+      "fmap/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
+      "ses-{file.info.BIDS.Session}",
+      "dir-{Dir}",
+      "run-{Run}",
+      "acq-{Acq}",
+      "{Suffix}"
+    ]
+  }
+}

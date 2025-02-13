@@ -1,0 +1,5 @@
+{
+  "namespace": "BIDS",
+  "extends": "reproin",
+  "description": "Detailed BIDS curation template with updated rules to handle T1w, T2w, functional, fieldmap, and diffusion acquisitions while avoiding duplicate paths."
+}

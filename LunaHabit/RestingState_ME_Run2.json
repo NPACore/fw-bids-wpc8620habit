@@ -1,0 +1,56 @@
+{
+  "id": "RestingState_ME_Run2",
+  "template": "func_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "Resting-state_ME_repeat$"
+    }
+  },
+  "initialize": {
+    "Task": "RestingState",
+    "Run": "2",
+    "Echo": {
+      "file.name": {
+        "$regex": "_e(?P<value>[0-9]+)",
+        "$default": null
+      }
+    },
+    "Suffix": {
+      "$switch": {
+        "$on": "acquisition.label",
+        "$cases": [
+          {
+            "$regex": ".*_SBRef$",
+            "$value": "sbref"
+          },
+          {
+            "$default": true,
+            "$value": "bold"
+          }
+        ]
+      }
+    }
+  },
+  "custom_name": {
+    "$join": [
+      "func/sub-{file.info.BIDS.Subject|pattern=(?P<value>^[^_]+)}",
+      "ses-{file.info.BIDS.Session}",
+      "task-{Task}",
+      "run-{Run}",
+      {
+        "$if": "Echo",
+        "then": "echo-{Echo}"
+      },
+      "{Suffix}"
+    ]
+  }
+}
