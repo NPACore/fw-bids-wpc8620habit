@@ -1,3 +1,5 @@
+all: LunaHabit_curate.json
+
 LunaHabit/:
 	fw download fw://mrrc/playground/files/test-5.json
 	mv test-5.json EH-202502.json

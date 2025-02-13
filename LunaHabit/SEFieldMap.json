@@ -1,0 +1,55 @@
+{
+  "id": "SEFieldMap",
+  "template": "fieldmap_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {
+      "$in": [
+        "nifti",
+        "NIfTI",
+        "JSON"
+      ]
+    },
+    "acquisition.label": {
+      "$regex": "SEFieldMap"
+    }
+  },
+  "initialize": {
+    "Dir": {
+      "acquisition.label": {
+        "$regex": "SEFieldMap_(?P<value>AP|PA)_",
+        "$default": null
+      }
+    },
+    // 2 acquistions one for task at 2.3mm res; one for ME rest at 3mm res
+    // both have AP + PA
+    "Acq":  {
+      "$switch": {
+        "$on": "acquisition.label",
+        "$cases": [
+          {
+             // leading .* is important!
+             //label ends with resolution so '.*' not needed at end
+            "$regex": ".*fMRI_SEFieldMap.*2.3mm",
+            "$value": "task23mm"
+          },
+          {
+            "$regex": ".*rsfMRI_SEFieldMap.*_3mm",
+            "$value": "rest3mm"
+          },
+          {
+            "$default": true,
+            "$value": null
+          }
+        ]
+      }
+    },
+    "Suffix": "epi",
+    "Run": {
+      "$run_counter": {
+        "key": "fmap.{file.info.BIDS.Acq}.{file.info.BIDS.Dir}.{file.info.BIDS.Suffix}.{file.name}"
+      }
+    }
+  }
+}
