@@ -71,17 +71,23 @@ print(f"analysis_id = {analysis_id}")
 
 ###
 # wait for job. if nothing else is running, expect 12s to run
-print("# waiting 30s for job to finish")
-time.sleep(30)
+print("# waiting 20s for job to finish")
+time.sleep(20)
 
-# log has 'msg' and 'fd'. dont care about file descriptor (STDERR=2)
 job = fw.jobs.find_one(f"_id={analysis_id}")
-print("\n".join([l['msg'] for l in job.get_logs() ]))
+
+# save and print log
+# log has 'msg' and 'fd'. dont care about file descriptor (STDERR=2)
+log_str="\n".join([l['msg'] for l in job.get_logs() ])
+with open("/tmp/fw-curate.log","w") as f:
+    f.write(log_str)
+print(log_str)
+
 # analysis output includes acquisiton list
 dest = fw.get(job['destination']['id'])
 dest.download_file("mrrc_playground_acquisitions.csv","/tmp/acq.csv")
 dest.download_file("mrrc_playground_niftis.csv","/tmp/nii.csv")
-print("# see /tmp/acq.csv and /tmp/nii.csv")
+print("# see /tmp/acq.csv /tmp/nii.csv /tmp/fw-curate.log")
 print("#   grep nii.gz /tmp/nii.csv| cut -d, -f5,6,9|column -ts,")
 # [x['name'] for x in dest['files']]
 # ['mrrc_playground_acquisitions.csv',
@@ -89,7 +95,3 @@ print("#   grep nii.gz /tmp/nii.csv| cut -d, -f5,6,9|column -ts,")
 #  'mrrc_playground_acquisitions_details_2.csv',
 #  'mrrc_playground_intendedfors.csv',
 #  'mrrc_playground_niftis.csv']
-
-
-
-print(f"download {analysis_label}")
