@@ -1,0 +1,17 @@
+// from: NM_AF1_AVG4
+// to: anat/sub-X_ses-Y_acq-NM_MTR.nii.gz
+{
+  "id": "NM",
+  "template": "anat_file",
+  "where": {
+    "container_type": "file",
+    "parent_container_type": "acquisition",
+    "file.type": {"$in": ["nifti", "NIfTI", "JSON"]
+    },
+    "acquisition.label": {"$regex": "NM_AF1_AVG4"}
+  },
+  "initialize": {
+    "Acq": "NM",
+    "Suffix": "MTR"
+  }
+}
