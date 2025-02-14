@@ -1,0 +1,57 @@
+{
+      "id": "AntiSaccade",
+      "template": "func_file",
+      "where": {
+        "container_type": "file",
+        "parent_container_type": "acquisition",
+        "file.type": {"$in": ["nifti", "NIfTI", "JSON"]
+        },
+        /* for some reason, 'reward_repeat' only gets flagged as MR
+           'Functional' is missing though it is correctly given to Habit
+           we can just disable intent. a matching label is thats good enough
+        */
+        //"file.classification.Intent": {"$in": ["Functional"]},
+        "acquisition.label": {
+          "$regex": "(?i)(?!.*PhysioLog.*)AntiSaccade"
+        }
+      },
+      "initialize": {
+        "Task": {
+          "acquisition.label": {
+            "$regex": "(?i)(?P<value>AntiSaccade)",
+            "$format": [{"$lower": true}]
+          }
+        },
+        "Run": {
+           "acquisition.label": {
+               "$regex": "(?i)_(?P<value>repeat)",
+               "$format": [
+                   {
+                       "$replace": {
+                           "$pattern": "repeat",
+                           "$replacement": "2"
+                       }
+                   }
+               ]
+           },
+        "$run_counter": {
+            "key": "func.{file.info.BIDS.Task}.{file.info.BIDS.Suffix}.{file.type}"
+          }
+        },
+        "Suffix": {
+          "$switch": {
+            "$on": "acquisition.label",
+            "$cases": [
+              {
+                "$regex": "(?i).*_SBRef$",
+                "$value": "sbref"
+              },
+              {
+                "$default": true,
+                "$value": "bold"
+              }
+            ]
+          }
+        }
+      }
+    }
