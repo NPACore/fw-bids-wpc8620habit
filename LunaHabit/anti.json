@@ -23,17 +23,11 @@
           }
         },
         "Run": {
-           "acquisition.label": {
-               "$regex": "(?i)_(?P<value>repeat)",
-               "$format": [
-                   {
-                       "$replace": {
-                           "$pattern": "repeat",
-                           "$replacement": "2"
-                       }
-                   }
-               ]
-           },
+          "$switch": {
+            "$on": "acquisition.label",
+            "$cases": [{"$regex": "(?i).*_(?P<value>repeat)", "$value": "2"},
+                       {"$default": true, "$value": "1"}]
+          },
         "$run_counter": {
             "key": "func.{file.info.BIDS.Task}.{file.info.BIDS.Suffix}.{file.type}"
           }
