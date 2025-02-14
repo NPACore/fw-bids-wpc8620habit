@@ -17,7 +17,7 @@
     }
   },
   "initialize": {
-    "Task": "RestingState",
+    "Task": "rest",
     // instead of run 1 and run 2
     // indicate if rest was before or after the tasks
     "Acq": {
