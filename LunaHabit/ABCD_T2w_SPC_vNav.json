@@ -4,13 +4,7 @@
   "where": {
     "container_type": "file",
     "parent_container_type": "acquisition",
-    "file.type": {
-      "$in": [
-        "nifti",
-        "NIfTI",
-        "JSON"
-      ]
-    },
+    "file.type": {"$in": ["nifti", "NIfTI", "JSON"]},
     "acquisition.label": {
       "$regex": "ABCD_T2w_SPC_vNav$"
     }
@@ -19,8 +13,9 @@
     "Acq": "vnav",
     "Suffix": "T2w",
     "Run": {
+      "$value": "+",
       "$run_counter": {
-        "key": "anat.{file.info.BIDS.Acq}.{file.info.BIDS.Suffix}.{file.type}"
+        "key": "anat.{file.info.BIDS.Acq}.{file.info.BIDS.Suffix}"
       }
     }
   }

@@ -24,12 +24,13 @@
         "$default": null
       }
     },
-
     "Run": {
-        "$default": "1",
+        // bids-client/tests/test_templates_unittest.py
+        // + always increments?
+        "$value": "+",
         // flywheel_curated/nyu-bair-vfs-project-template.json
         "$run_counter": {
-            "key": "field_map.{file.info.BIDS.Dir}"
+            "key": "field_map.{file.info.BIDS.Dir}.{file.info.BIDS.Acq}.{file.info.BIDS.Suffix}"
           }
     },
 
